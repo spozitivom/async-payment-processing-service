@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, func
+from sqlalchemy import DateTime, MetaData, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 NAMING_CONVENTION = {
@@ -23,5 +23,8 @@ class UUIDPrimaryKeyMixin:
 
 class CreatedAtMixin:
     created_at: Mapped[datetime] = mapped_column(
-        default=lambda: datetime.now(UTC), server_default=func.now(), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+        server_default=func.now(),
+        nullable=False,
     )

@@ -1,12 +1,10 @@
-"""ORM-модель платежа."""
-
 from __future__ import annotations
 
 from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import JSON, Numeric, String, Text
+from sqlalchemy import DateTime, JSON, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from domain.enums import Currency, PaymentStatus
@@ -29,4 +27,4 @@ class Payment(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     idempotency_key: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     webhook_url: Mapped[str] = mapped_column(Text, nullable=False)
     failure_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
-    processed_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    processed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

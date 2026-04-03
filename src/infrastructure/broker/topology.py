@@ -30,7 +30,12 @@ payments_routing_key = settings.payments_routing_key
 
 
 async def declare_topology() -> None:
-    await broker.declare_exchange(payments_exchange)
-    await broker.declare_exchange(payments_dlx)
-    await broker.declare_queue(payments_queue)
-    await broker.declare_queue(payments_dlq)
+    main_exchange = await broker.declare_exchange(payments_exchange)
+    dlx_exchange = await broker.declare_exchange(payments_dlx)
+    main_queue = await broker.declare_queue(payments_queue)
+    dlq_queue = await broker.declare_queue(payments_dlq)
+
+    # Явно связываем очереди с exchange, чтобы topology не зависела
+    # от наличия subscriber-ов и корректно работала для DLQ.
+    await main_queue.bind(main_exchange, routing_key=payments_routing_key)
+    await dlq_queue.bind(dlx_exchange, routing_key=payments_dlq.name)

@@ -1,8 +1,10 @@
-/docs/
-__pycache__/
-*.py[cod]
-*.egg-info/
+docs/
 .pytest_cache/
 .ruff_cache/
-.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
 .env
+.venv/

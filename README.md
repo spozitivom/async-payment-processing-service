@@ -130,6 +130,8 @@ docker compose up --build
 docker compose up --build -d
 ```
 
+Если порт `8000` на хосте уже занят, поменяй `APP_PORT` в `.env`, например на `8001`. Host port для API в `docker-compose.yml` берется из `APP_PORT`.
+
 ## Как применить миграции
 
 Отдельный ручной запуск миграций:
@@ -161,6 +163,8 @@ Swagger UI:
 ```text
 http://localhost:8000/docs
 ```
+
+Если в `.env` задан другой `APP_PORT`, используй соответствующий host port, например `http://localhost:8001/docs`.
 
 OpenAPI schema:
 
@@ -306,6 +310,12 @@ curl -X POST http://localhost:8000/api/v1/payments \
 3. Открой RabbitMQ Management UI.
 4. Перейди в очередь `payments.dlq`.
 5. Убедись, что там появилось сообщение об ошибке доставки webhook.
+
+Альтернативно можно проверить DLQ через CLI:
+
+```bash
+docker compose exec rabbitmq rabbitmqadmin get queue=payments.dlq count=5 ackmode=ack_requeue_false
+```
 
 ## Как смотреть логи контейнеров
 
